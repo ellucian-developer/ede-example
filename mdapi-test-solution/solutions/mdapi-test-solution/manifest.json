@@ -1,0 +1,32 @@
+{
+  "$schema": "./manifest-schema.json",
+  "title": "mdapi-test-solution",
+  "description": "Simple Solution that creates a singular Ethos Application.",
+  "version": "1.0.0",
+  "compatibleERPs": [
+    "banner"
+  ],
+  "owner": {
+    "company": "Ellucian Inc.",
+    "companyType": "ellucian",
+    "contactName": "John Doe",
+    "contactEmail": "John.Doe@ellucian.com",
+    "website": "https://www.ellucian.com",
+    "supportWebsite": "https://support.ellucian.com"
+  },
+  "documentationURL": "https://resources.ellucian.com",
+  "licenseType": "entitlement",
+  "status": "draft",
+  "resources": [
+    {
+      "resourceType": "ethosApplication",
+      "name": "mdapiSampleEthosApplication",
+      "ref": "eapp1",
+      "apiEndpoint": "https://mdapi-dev.elluciancloud.com/no-resources",
+      "description": "MDAPI Sample Ethos Application",
+      "directResources": [
+        { "resourceName": "custom-resource-1" }
+      ]
+    }
+  ]
+}
