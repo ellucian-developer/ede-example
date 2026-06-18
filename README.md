@@ -9,7 +9,7 @@ This project provides an example and instructions for deploying Ellucian platfor
 * Your Ethos Integration tenant must contain an application which can be used to call the MDAPI endpoints.  An application labeled "Deployment Engine" is provisioned by Ellucian automatically for this purpose, but you can create a different one if desired.
     * If a new application is created, add it to the **Application Access** list on Ethos Deployment Engine platform component.
     * If a new application is created, add it to the **Application Access** list on the Experience platform component.  This enables the next step of using it in Permissions.
-    * In Experience Setup -> Permissions -> Manifest Deployments, grant the **Upload and Execute** permission to the Ethos application that will be used for calling MDAPI endpoints.
+    * In Experience Setup -> Permissions -> Deployment Engine, grant the **Upload and Execute** permission to the Ethos application that will be used for calling MDAPI endpoints.
     * You will use the API key from this Ethos Integration application to obtain a token for calling MDAPI endpoints.
 
 # What is the example?
