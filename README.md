@@ -11,6 +11,13 @@ This project provides an example and instructions for deploying Ellucian platfor
     * If a new application is created, add it to the **Application Access** list on the Experience platform component.  This enables the next step of using it in Permissions.
     * In Experience Setup -> Permissions -> Deployment Engine, grant the **Upload and Execute** permission to the Ethos application that will be used for calling MDAPI endpoints.
     * You will use the API key from this Ethos Integration application to obtain a token for calling MDAPI endpoints.
+    * Refer to the next section for an important step of restricting the Ethos API key.
+
+
+# Restricting the MDAPI Ethos API Key
+
+Being able to provision resources into an environment using EDE is a privileged operation.  As an extra precaution, the Ethos API key that provides access to EDE should have the proper IP address restrictions associated to it.  Ellucian automatically provisions the "Deployment Engine" application with a CIDR block that prevents access from any IP address.  Be sure to update this to an appropriate CIDR block, or remove the restrictions at your own risk.  If the "Deployment Engine" application does not have any IP restrictions, consider adding a CIDR block to it.
+
 
 # What is the example?
 
