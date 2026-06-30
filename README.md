@@ -13,6 +13,16 @@ This project provides an example and instructions for deploying Ellucian platfor
     * You will use the API key from this Ethos Integration application to obtain a token for calling MDAPI endpoints.
     * Refer to the next section for an important step of restricting the Ethos API key.
 
+# Regional Adjustments
+
+The scripts in this project require minor modifications to adjust for your deployment region.   Replace the Ethos Integration endpoint accordingly:
+
+```
+integrate.elluciancloud.com
+integrate.elluciancloud.ie
+integrate.elluciancloud.com.au
+integrate.elluciancloud.ca
+```
 
 # Restricting the MDAPI Ethos API Key
 
