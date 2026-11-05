@@ -1,8 +1,8 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Ellucian 3PIA Solutions Schema",
-  "description": "A schema for validating Ellucian 3PIA solution manifest documents.",
-  "version": "1.0.0",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Ellucian EDE Manifest Schema",
+  "description": "A schema for validating EDE (Ellucian Deployment Engine) solution manifests.",
+  "version": "1.1.0",
   "type": "object",
   "properties": {
     "$schema": {
@@ -11,7 +11,8 @@
     },
     "title": {
       "type": "string",
-      "description": "Solution title. NOTE: This must match the name of the directory in which manifest.json resides."
+      "description": "Solution title. NOTE: This must match the name of the directory in which manifest.json resides.",
+      "pattern": "^[a-zA-Z][a-zA-Z0-9_-]{0,84}$"
     },
     "description": {
       "type": "string",
@@ -47,20 +48,55 @@
       "description": "The owner of the solution.",
       "type": "object",
       "properties": {
-        "company": { "type": "string", "description": "Name of the company responsible for development"},
-        "companyType": {"type": "string", "enum": ["ellucian", "customer", "partner", "community"]},
-        "contactName": {"type": "string", "description": "Name of the primary solution contact."},
-        "contactEmail": {"type": "string", "format": "email", "description": "Primary contact email address."},
-        "website": { "type": "string", "format": "uri", "description": "The website for this contact/company."},
-        "supportWebsite": { "type": "string", "format": "uri", "description": "The support site for this contact/company."}
+        "company": {
+          "type": "string",
+          "description": "Name of the company responsible for development"
+        },
+        "companyType": {
+          "type": "string",
+          "enum": [
+            "ellucian",
+            "customer",
+            "partner",
+            "community"
+          ]
+        },
+        "contactName": {
+          "type": "string",
+          "description": "Name of the primary solution contact."
+        },
+        "contactEmail": {
+          "type": "string",
+          "format": "email",
+          "description": "Primary contact email address."
+        },
+        "website": {
+          "type": "string",
+          "format": "uri",
+          "description": "The website for this contact/company."
+        },
+        "supportWebsite": {
+          "type": "string",
+          "format": "uri",
+          "description": "The support site for this contact/company."
+        }
       },
-      "required": ["contactName", "contactEmail", "companyType"],
+      "required": [
+        "contactName",
+        "contactEmail",
+        "companyType"
+      ],
       "additionalProperties": false
     },
     "licenseType": {
       "$comment": "TODO: Consider mimicking the 'licensing' mechanism in the experience extension.json file.",
       "type": "string",
-      "enum": ["entitlement", "fee", "open-source", "subscription"],
+      "enum": [
+        "entitlement",
+        "fee",
+        "open-source",
+        "subscription"
+      ],
       "description": "(Optional) License Type"
     },
     "salesforceSKU": {
@@ -92,7 +128,11 @@
         }
       },
       "additionalProperties": false,
-      "required": ["ethosTenantId", "accountShortname", "testEnvId"]
+      "required": [
+        "ethosTenantId",
+        "accountShortname",
+        "testEnvId"
+      ]
     },
     "postgresqlTestTenant": {
       "$comment": "TODO: We might want to have a more flexible format for 'test' tenants.",
@@ -113,7 +153,11 @@
         }
       },
       "additionalProperties": false,
-      "required": ["ethosTenantId", "accountShortname", "testEnvId"]
+      "required": [
+        "ethosTenantId",
+        "accountShortname",
+        "testEnvId"
+      ]
     },
     "jobStatusEndpoints": {
       "description": "A list of endpoints to be called when the job status changes.",
@@ -121,8 +165,7 @@
       "items": {
         "type": "string",
         "format": "uri"
-      },
-      "additionalItems": false
+      }
     },
     "resourceStatusEndpoints": {
       "description": "A list of endpoints to be called when the status of any given resource changes.",
@@ -130,39 +173,104 @@
       "items": {
         "type": "string",
         "format": "uri"
-      },
-      "additionalItems": false
+      }
     },
     "resources": {
       "description": "(Optional) An ordered list of the resources that must be deployed for this 3PI. Each resource must be one of the predefined types.",
       "type": "array",
       "items": {
         "anyOf": [
-          { "$ref": "#/definitions/bannerSecurityUser" },
-          { "$ref": "#/definitions/bannerSpecAPI" },
-          { "$ref": "#/definitions/bannerCustomTable" },
-          { "$ref": "#/definitions/bannerTableExtension" },
-          { "$ref": "#/definitions/bannerTableExtensionMapping" },
-          { "$ref": "#/definitions/dataConnectPipeline" },
-          { "$ref": "#/definitions/dataConnectServerlessApi" },
-          { "$ref": "#/definitions/dataConnectCrosswalk"},
-          { "$ref": "#/definitions/dataConnectTransformFunction"},
-          { "$ref": "#/definitions/ethosApplication" },
-          { "$ref": "#/definitions/s3Bucket" },
-          { "$ref": "#/definitions/bannerBEPEvent"},
-          { "$ref": "#/definitions/bannerCrosswalkRule"},
-          { "$ref": "#/definitions/apsCredential"},
-          { "$ref": "#/definitions/apsCustomerTemplate"},
-          { "$ref": "#/definitions/metaDataValidator"},
-          { "$ref": "#/definitions/webAPIRequest"},
-          { "$ref": "#/definitions/colleagueBusinessEvent"}
+          { "$ref": "#/$defs/apsCredential"},
+          { "$ref": "#/$defs/apsCustomerTemplate"},
+          { "$ref": "#/$defs/bannerBEPEvent"},
+          { "$ref": "#/$defs/bannerCrosswalkRule"},
+          { "$ref": "#/$defs/bannerCustomBEPEvent"},
+          { "$ref": "#/$defs/bannerCustomTable"},
+          { "$ref": "#/$defs/bannerSecurityUser"},
+          { "$ref": "#/$defs/bannerSpecAPI"},
+          { "$ref": "#/$defs/bannerTableExtension"},
+          { "$ref": "#/$defs/bannerTableExtensionMapping"},
+          { "$ref": "#/$defs/bpaAction"},
+          { "$ref": "#/$defs/bpaExternalTask"},
+          { "$ref": "#/$defs/bpaProcessDefinition"},
+          { "$ref": "#/$defs/bpaApprovalGroup"},
+          { "$ref": "#/$defs/colleagueBusinessEvent"},
+          { "$ref": "#/$defs/colleagueSecurityUser"},
+          { "$ref": "#/$defs/dataConnectCrosswalk"},
+          { "$ref": "#/$defs/dataConnectPipeline"},
+          { "$ref": "#/$defs/dataConnectServerlessApi"},
+          { "$ref": "#/$defs/dataConnectTransformFunction"},
+          { "$ref": "#/$defs/ellucianForm"},
+          { "$ref": "#/$defs/ellucianFormDataSource"},
+          { "$ref": "#/$defs/ethosApplication"},
+          { "$ref": "#/$defs/experienceExtension"},
+          { "$ref": "#/$defs/experiencePermission"},
+          { "$ref": "#/$defs/experienceRole"},
+          { "$ref": "#/$defs/fraudDetectionCredential"},
+          { "$ref": "#/$defs/insightsCollection"},
+          { "$ref": "#/$defs/metaDataValidator"},
+          { "$ref": "#/$defs/personManagerCredential"},
+          { "$ref": "#/$defs/s3Bucket"},
+          { "$ref": "#/$defs/webAPIRequest"}
         ]
       }
     }
   },
-  "required": ["$schema", "title", "description", "version", "compatibleERPs", "status", "owner"],
+  "required": [
+    "$schema",
+    "title",
+    "description",
+    "version",
+    "compatibleERPs",
+    "status",
+    "owner"
+  ],
   "additionalProperties": false,
-  "definitions": {
+  "$defs": {
+    "resourceAttachment": {
+      "type": "object",
+      "description": "A file attachment that allows a 'named' file to be attached to a resource during processing.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the file to be attached. Resources may dictate the file name to be used so they can look this up during upload/processing.",
+          "maxLength": 255
+        },
+        "localPath": {
+          "type": "string",
+          "description": "The local path to the file to be attached. This is relative to the manifest.json file.",
+          "maxLength": 255
+        },
+        "contentType": {
+          "type": "string",
+          "description": "The content type of the file to be attached. This is used to determine how to process the attachment. Values used should be well known mime-types.",
+          "maxLength": 255
+        }
+      },
+      "required": [
+        "name",
+        "localPath",
+        "contentType"
+      ],
+      "additionalProperties": false
+    },
+    "resourceAttachments": {
+      "description": "Array/list of resourceAttachment objects.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/resourceAttachment"
+      }
+    },
+    "dependsOn": {
+      "type": "array",
+      "description": "An optional list of explicit resource dependencies using the ${resourceType.ref.primaryKey} notation. Resources listed here will be deployed before this resource. If a referenced resource does not exist in the manifest, the deployment will abort.",
+      "items": {
+        "type": "string",
+        "pattern": "^\\$\\{[a-zA-Z][a-zA-Z0-9]*\\.[a-zA-Z_][a-zA-Z0-9_]*\\.[a-zA-Z][a-zA-Z0-9]*\\}$",
+        "description": "A reference to another resource in this manifest using ${resourceType.ref.attribute} notation."
+      },
+      "default": []
+    },
     "baseRef": {
       "type": "string",
       "maxLength": 48,
@@ -181,7 +289,7 @@
           "x-referenceable": true
         },
         "password": {
-          "description": "OUTPUT: The password (string) assigned to the user during deployment by the 3PIA engine.",
+          "description": "OUTPUT: The password (string) assigned to the user during deployment by EDE.",
           "type": "null",
           "sensitive": true,
           "x-referenceable": true
@@ -192,7 +300,10 @@
           "x-referenceable": true
         },
         "ref": {
-          "$ref": "#/definitions/baseRef"
+          "$ref": "#/$defs/baseRef"
+        },
+        "dependsOn": {
+          "$ref": "#/$defs/dependsOn"
         },
         "description": {
           "description": "The description of this user.",
@@ -222,7 +333,10 @@
             "properties": {
               "objectName": {
                 "type": "string",
-                "description": "Banner object name to grant access to."
+                "description": "Banner object name to grant access to. Static names must be uppercase letters, numbers, underscores, and hyphens only with no leading/trailing spaces.",
+                "pattern": "^(?:[A-Z0-9_-]+|\\$\\{[a-zA-Z][a-zA-Z0-9]*\\.[a-zA-Z_][a-zA-Z0-9_]*\\.[a-zA-Z][a-zA-Z0-9]*\\})$",
+                "minLength": 1,
+                "maxLength": 255
               },
               "accessType": {
                 "type": "string",
@@ -281,7 +395,10 @@
           "description": "Value to indicate the target ERP/SIS this manifest is intended for."
         },
         "ref": {
-          "$ref": "#/definitions/baseRef"
+          "$ref": "#/$defs/baseRef"
+        },
+        "dependsOn": {
+          "$ref": "#/$defs/dependsOn"
         },
         "description": {
           "description": "The description of this application, this will be visible to customers in Ethos UI.",
@@ -293,7 +410,7 @@
           "x-referenceable": true
         },
         "apiKey": {
-          "description": "OUTPUT: The api key (string) assigned to the application during deployment by the 3PIA engine.",
+          "description": "OUTPUT: The api key (string) assigned to the application during deployment by EDE.",
           "type": "null",
           "sensitive": true,
           "x-referenceable": true
@@ -312,7 +429,10 @@
             },
             "version": {
               "description": "Which version of the catalog application this application should be based on. Uses semantic versioning syntax",
-              "type": "string"
+              "type": "string",
+              "maxLength": 15,
+              "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$",
+              "example": "1.0.0"
             }
           },
           "required": [
@@ -390,7 +510,7 @@
               "type": "string"
             },
             "password": {
-              "$comment": "Same as username, should we have some referencial capability  (who is the authority here)",
+              "$comment": "Same as username, should we have some referential capability  (who is the authority here)",
               "description": "Reference to a password that is used to authenticate the api calls for the resource listing.",
               "type": "string"
             },
@@ -453,7 +573,7 @@
             "additionalProperties": false
           }
         },
-        "eventSubscriptions":{
+        "eventSubscriptions": {
           "description": "The list of events this application would like to subscribe to.",
           "type": "array",
           "items": {
@@ -469,13 +589,13 @@
                 "type": "string",
                 "minLength": 1,
                 "pattern": "^[a-zA-Z0-9-()?!¡¿@[\\]&_ \u00C0-\u021B \u1E80-\u1E85 \u1EF3]+$"
-              }              
+              }
             },
             "additionalProperties": false,
             "required": [
               "eventName",
               "owningApplication"
-            ]            
+            ]
           }
         },
         "graphqlResources": {
@@ -492,6 +612,15 @@
             },
             "additionalProperties": false
           }
+        },
+        "platformComponentsAppAccess": {
+          "description": "A list of Platform Component names that this application should be added to for Application Access. The check performed for Platform Component name matching is 'starts with'. Note: If a platform component cannot be matched, an error will be thrown and processing of resources will be halted.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 64
+          },
+          "additionalProperties": false
         },
         "tags": {
           "description": "Optional array of key value pairs",
@@ -547,7 +676,10 @@
           "description": "Value to indicate the target ERP/SIS this manifest is intended for."
         },
         "ref": {
-          "$ref": "#/definitions/baseRef"
+          "$ref": "#/$defs/baseRef"
+        },
+        "dependsOn": {
+          "$ref": "#/$defs/dependsOn"
         },
         "description": {
           "description": "The description of this Banner Spec API for documentation purposes.",
@@ -556,6 +688,20 @@
         "resourceType": {
           "const": "bannerSpecAPI",
           "description": "Identifies what kind of resource this object represents."
+        },
+        "status": {
+          "type": "string",
+          "description": "The status to set for this API [enabled | disabled]. Default = enabled.",
+          "enum": [
+            "enabled",
+            "disabled"
+          ],
+          "default": "enabled"
+        },
+        "oauthAllowed": {
+          "type": "boolean",
+          "description": "Whether or not to allow oauth for this API. Default = false.",
+          "default": false
         },
         "endpointSpec": {
           "description": "Path (relative to manifest) to the json file containing the endpoint specification for the api.",
@@ -621,7 +767,10 @@
           "description": "Value to indicate the target ERP/SIS this manifest is intended for."
         },
         "ref": {
-          "$ref": "#/definitions/baseRef"
+          "$ref": "#/$defs/baseRef"
+        },
+        "dependsOn": {
+          "$ref": "#/$defs/dependsOn"
         },
         "description": {
           "description": "The description of this custom table... for documentation purposes.",
@@ -639,6 +788,15 @@
           "description": "OUTPUT: The id (uuid: string) of the custom table in the Banner database.",
           "type": "null",
           "x-referenceable": true
+        },
+        "recreateOnConflict": {
+          "type": "boolean",
+          "description": "By default, if a table with the same name already exists in the Banner database, an update will be performed. Setting this flag to true will cause EDE to drop and recreate the table if it already exists and cannot be updated. Use with caution as this will cause data loss.",
+          "default": false
+        },
+        "defaultDataSet": {
+          "description": "(Optional) Path (relative to manifest) to the json file containing the default data to be inserted into the custom table upon creation (this only happens once on initial creation of the table). This data must be in the exact format to be used in the body of the custom table's api call for batch data insertion.",
+          "type": "string"
         }
       },
       "required": [
@@ -676,7 +834,10 @@
           "description": "Value to indicate the target ERP/SIS this manifest is intended for."
         },
         "ref": {
-          "$ref": "#/definitions/baseRef"
+          "$ref": "#/$defs/baseRef"
+        },
+        "dependsOn": {
+          "$ref": "#/$defs/dependsOn"
         },
         "description": {
           "description": "The description of this table extension... for documentation purposes.",
@@ -694,6 +855,11 @@
           "description": "OUTPUT: The id (uuid: string) of the extension mapping in the Banner database.",
           "type": "null",
           "x-referenceable": true
+        },
+        "recreateOnConflict": {
+          "type": "boolean",
+          "description": "By default, if a table extension with the same name already exists in the Banner database, an update will be performed. Setting this flag to true will cause EDE to drop and recreate the table extension if it already exists and cannot be updated. Use with caution as this will cause data loss.",
+          "default": false
         }
       },
       "required": [
@@ -730,7 +896,10 @@
           "description": "Value to indicate the target ERP/SIS this manifest is intended for."
         },
         "ref": {
-          "$ref": "#/definitions/baseRef"
+          "$ref": "#/$defs/baseRef"
+        },
+        "dependsOn": {
+          "$ref": "#/$defs/dependsOn"
         },
         "baselinePageName": {
           "description": "Name of the Banner admin page to map into.",
@@ -801,7 +970,10 @@
           "description": "Value to indicate the target ERP/SIS this manifest is intended for."
         },
         "ref": {
-          "$ref": "#/definitions/baseRef"
+          "$ref": "#/$defs/baseRef"
+        },
+        "dependsOn": {
+          "$ref": "#/$defs/dependsOn"
         },
         "name": {
           "type": "string",
@@ -809,7 +981,7 @@
           "maxLength": 255
         },
         "createdPipelineName": {
-          "description": "OUTPUT: Name (string) of the pipeline that was created by the 3PIA deployer engine.",
+          "description": "OUTPUT: Name (string) of the pipeline that was created by EDE.",
           "type": "null",
           "x-referenceable": true
         },
@@ -827,7 +999,7 @@
           "maxLength": 255
         },
         "createdPackageName": {
-          "description": "OUTPUT: Name (string) of the DataConnect Package that was created by the 3PIA deployer engine.",
+          "description": "OUTPUT: Name (string) of the DataConnect Package that was created by EDE.",
           "type": "null",
           "x-referenceable": true
         },
@@ -843,7 +1015,10 @@
         "version": {
           "type": "string",
           "description": "The version of the pipeline that should be created or shared. Note: when creating a pipeline, the version is used to publish.",
-          "x-referenceable": true
+          "x-referenceable": true,
+          "maxLength": 15,
+          "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$",
+          "example": "1.0.0"
         },
         "specification": {
           "description": "Path (relative to manifest) to the json file containing the specification for the dataconnect pipeline. Only used when deployAction = create.",
@@ -879,7 +1054,8 @@
               "value": {
                 "$comment": "TODO: We might have several options here, but a chat about that needs to happen to determine the format. At the least, we'll support some jinja2 style/mustache syntax.",
                 "description": "The value, hard coded as a string, or a template string using the '{{ ... }}' syntax, or a reference (which is pending specification)",
-                "type": "string"
+                "type": "string",
+                "minLength": 1
               }
             },
             "required": [
@@ -895,6 +1071,7 @@
         "ref",
         "resourceType",
         "deployAction",
+        "packageName",
         "version"
       ],
       "additionalProperties": false
@@ -928,7 +1105,10 @@
           "description": "Value to indicate the target ERP/SIS this manifest is intended for."
         },
         "ref": {
-          "$ref": "#/definitions/baseRef"
+          "$ref": "#/$defs/baseRef"
+        },
+        "dependsOn": {
+          "$ref": "#/$defs/dependsOn"
         },
         "name": {
           "type": "string",
@@ -936,7 +1116,7 @@
           "maxLength": 255
         },
         "createdServerlessApiName": {
-          "description": "OUTPUT: Name (string) of the serverless api that was created by the 3PIA deployer engine.",
+          "description": "OUTPUT: Name (string) of the serverless api that was created by EDE.",
           "type": "null",
           "x-referenceable": true
         },
@@ -954,7 +1134,7 @@
           "maxLength": 255
         },
         "createdPackageName": {
-          "description": "OUTPUT: Name (string) of the DataConnect Package that was created by the 3PIA deployer engine.",
+          "description": "OUTPUT: Name (string) of the DataConnect Package that was created by EDE.",
           "type": "null",
           "x-referenceable": true
         },
@@ -970,7 +1150,10 @@
         "version": {
           "type": "string",
           "description": "The version of the serverless api that should be created or shared. Note: when creating a serverless api, the version is used to publish.",
-          "x-referenceable": true
+          "x-referenceable": true,
+          "maxLength": 15,
+          "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$",
+          "example": "1.0.0"
         },
         "specification": {
           "description": "Path (relative to manifest) to the json file containing the specification for the dataconnect serverless api. Only used when deployAction = create.",
@@ -991,32 +1174,33 @@
         "ref",
         "resourceType",
         "deployAction",
+        "packageName",
         "version"
       ],
       "additionalProperties": false
     },
     "s3Bucket": {
       "type": "object",
-      "description": "This resource type contains attributes for an AWS S3 bucket to be created. NOTE: the 'name' attribute is actually a base name. The bucket that is actually created will have additional customer-specific details added to the name (like 3pia-{shortname}-{account_id}-{env_id}-{name}). The actual name of the bucket created is returned in the 'bucketName' attribute and can be referenced in other resources as '${s3Bucket.ref.bucketName}'.",
+      "description": "This resource type contains attributes for an AWS S3 bucket to be created. NOTE: the 'name' attribute is actually a base name. The bucket that is actually created will have additional customer-specific details added to the name (like ede-{shortname}-{account_id}-{env_id}-{name}). The actual name of the bucket created is returned in the 'bucketName' attribute and can be referenced in other resources as '${s3Bucket.ref.bucketName}'.",
       "properties": {
         "name": {
-          "description": "The base name of the S3 bucket to be created. The bucket that is actually created will have additional customer-specific details added to the name (like 3pia-{shortname}-{account_id}-{env_id}-{name}). The actual name of the bucket created is returned in the 'bucketName' attribute and can be referenced in other resources as '${s3Bucket.ref.bucketName}'.",
+          "description": "The base name of the S3 bucket to be created. The bucket that is actually created will have additional customer-specific details added to the name (like ede-{shortname}-{account_id}-{env_id}-{name}). The actual name of the bucket created is returned in the 'bucketName' attribute and can be referenced in other resources as '${s3Bucket.ref.bucketName}'.",
           "type": "string",
           "pattern": "^[a-zA-Z_][a-zA-Z0-9_]{0,48}$"
         },
         "bucketName": {
-          "description": "OUTPUT: Name (string) of the S3 bucket that was created by the 3PIA deployer engine.",
+          "description": "OUTPUT: Name (string) of the S3 bucket that was created by EDE.",
           "type": "null",
           "x-referenceable": true
         },
         "keyId": {
-          "description": "OUTPUT: Generated KeyId (string) used to access the S3 bucket that was created by the 3PIA deployer engine.",
+          "description": "OUTPUT: Generated KeyId (string) used to access the S3 bucket that was created by EDE.",
           "type": "null",
           "sensitive": true,
           "x-referenceable": true
         },
         "secretKey": {
-          "description": "OUTPUT: Secret key (string) used to access the S3 bucket that was created by the 3PIA deployer engine.",
+          "description": "OUTPUT: Secret key (string) used to access the S3 bucket that was created by EDE.",
           "type": "null",
           "sensitive": true,
           "x-referenceable": true
@@ -1045,7 +1229,10 @@
           "description": "Value to indicate the target ERP/SIS this manifest is intended for."
         },
         "ref": {
-          "$ref": "#/definitions/baseRef"
+          "$ref": "#/$defs/baseRef"
+        },
+        "dependsOn": {
+          "$ref": "#/$defs/dependsOn"
         },
         "description": {
           "description": "The description of the purpose for this S3 bucket... for documentation purposes.",
@@ -1102,7 +1289,10 @@
           "description": "Value to indicate the target ERP/SIS this manifest is intended for."
         },
         "ref": {
-          "$ref": "#/definitions/baseRef"
+          "$ref": "#/$defs/baseRef"
+        },
+        "dependsOn": {
+          "$ref": "#/$defs/dependsOn"
         },
         "description": {
           "description": "The description of the Custom BEP Event... for documentation purposes.",
@@ -1157,7 +1347,10 @@
           "description": "Value to indicate the target ERP/SIS this manifest is intended for."
         },
         "ref": {
-          "$ref": "#/definitions/baseRef"
+          "$ref": "#/$defs/baseRef"
+        },
+        "dependsOn": {
+          "$ref": "#/$defs/dependsOn"
         },
         "translationCode": {
           "type": "string",
@@ -1351,7 +1544,10 @@
           "description": "Value to indicate the target ERP/SIS this manifest is intended for."
         },
         "ref": {
-          "$ref": "#/definitions/baseRef"
+          "$ref": "#/$defs/baseRef"
+        },
+        "dependsOn": {
+          "$ref": "#/$defs/dependsOn"
         },
         "crosswalkName": {
           "description": "The name of the crosswalk to be created (letters and numbers only).",
@@ -1363,6 +1559,11 @@
           "description": "The default value, used in the event that no cases match.",
           "type": "string",
           "maxLength": 255
+        },
+        "updateExisting": {
+          "description": "Optional. If true, an existing crosswalk with the same name in the tenant is overwritten with the values defined in this manifest. If false (default), an existing crosswalk is left unchanged.",
+          "type": "boolean",
+          "default": false
         },
         "mappings": {
           "description": "An array of mappings that will be used to match and crosswalk a value.",
@@ -1435,7 +1636,10 @@
           "description": "Value to indicate the target ERP/SIS this manifest is intended for."
         },
         "ref": {
-          "$ref": "#/definitions/baseRef"
+          "$ref": "#/$defs/baseRef"
+        },
+        "dependsOn": {
+          "$ref": "#/$defs/dependsOn"
         },
         "functionName": {
           "type": "string",
@@ -1444,7 +1648,7 @@
           "maxLength": 255
         },
         "createdFunctionName": {
-          "description": "OUTPUT: Name (string) of the dataconnect function that was created by the 3PIA deployer engine.",
+          "description": "OUTPUT: Name (string) of the dataconnect function that was created by EDE.",
           "type": "null",
           "x-referenceable": true
         },
@@ -1454,7 +1658,7 @@
           "maxLength": 255
         },
         "createdPackageName": {
-          "description": "OUTPUT: Name (string) of the dataconnect package that was created by the 3PIA deployer engine.",
+          "description": "OUTPUT: Name (string) of the dataconnect package that was created by EDE.",
           "type": "null",
           "x-referenceable": true
         },
@@ -1478,14 +1682,19 @@
         "version": {
           "type": "string",
           "description": "The version of the transform function that should be shared or created. Used for both deployAction = [create|share].",
-          "x-referenceable": true
+          "x-referenceable": true,
+          "maxLength": 15,
+          "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$",
+          "example": "1.0.0"
         }
       },
       "required": [
         "resourceType",
         "ref",
         "deployAction",
-        "functionName"
+        "functionName",
+        "packageName",
+        "version"
       ],
       "additionalProperties": false
     },
@@ -1497,7 +1706,10 @@
           "description": "[READ-ONLY] This resource type retrieves the APS (Application Processing Service) credential from the Ethos Config Service for the target deploy environment... only to be referenced elsewhere in the manifest."
         },
         "ref": {
-          "$ref": "#/definitions/baseRef"
+          "$ref": "#/$defs/baseRef"
+        },
+        "dependsOn": {
+          "$ref": "#/$defs/dependsOn"
         },
         "primaryKey": {
           "description": "OUTPUT: The unique key for the created resource inside its target system. Primary key attribute(s): username",
@@ -1517,6 +1729,72 @@
           "description": "OUTPUT: The password (string) for the APS account... used for authentication to access APS APIs.",
           "type": "null",
           "sensitive": true,
+          "x-referenceable": true
+        },
+        "compatibleDeployStrategies": {
+          "const": [
+            "saas",
+            "onprem",
+            "managedcloud"
+          ],
+          "description": "Defines the deploy strategies that are compatible with this resourceType"
+        }
+      },
+      "compatibleERPs": {
+        "const": [
+          "banner",
+          "colleague"
+        ],
+        "description": "Value to indicate the target ERP/SIS this manifest is intended for."
+      },
+      "required": [
+        "resourceType",
+        "ref"
+      ],
+      "additionalProperties": false
+    },
+    "fraudDetectionCredential": {
+      "type": "object",
+      "properties": {
+        "resourceType": {
+          "const": "fraudDetectionCredential",
+          "description": "[READ-ONLY] This resource type retrieves the Fraud Detection credential from the Ethos Config Service (spamdetection/prod) for the target deploy environment... only to be referenced elsewhere in the manifest."
+        },
+        "ref": {
+          "$ref": "#/$defs/baseRef"
+        },
+        "dependsOn": {
+          "$ref": "#/$defs/dependsOn"
+        },
+        "primaryKey": {
+          "description": "OUTPUT: The unique key for the created resource inside its target system. Primary key attribute(s): username",
+          "type": "null",
+          "x-referenceable": true
+        },
+        "description": {
+          "description": "A description for this credential, for documentation purposes only.",
+          "type": "string"
+        },
+        "username": {
+          "type": "null",
+          "description": "OUTPUT: The username (string) for the Fraud Detection account... used for authentication to access Fraud Detection APIs.",
+          "x-referenceable": true
+        },
+        "password": {
+          "description": "OUTPUT: The password (string) for the Fraud Detection account... used for authentication to access Fraud Detection APIs.",
+          "type": "null",
+          "sensitive": true,
+          "x-referenceable": true
+        },
+        "apiKey": {
+          "type": "null",
+          "description": "OUTPUT: The Fraud Detection Publisher API Key.",
+          "sensitive": true,
+          "x-referenceable": true
+        },
+        "url": {
+          "type": "null",
+          "description": "OUTPUT: The Fraud Detection URL.",
           "x-referenceable": true
         },
         "compatibleDeployStrategies": {
@@ -1569,7 +1847,10 @@
           "description": "Value to indicate the target ERP/SIS this manifest is intended for."
         },
         "ref": {
-          "$ref": "#/definitions/baseRef"
+          "$ref": "#/$defs/baseRef"
+        },
+        "dependsOn": {
+          "$ref": "#/$defs/dependsOn"
         },
         "templateDescription": {
           "description": "(optional) Just an optional label / description to put on the template to describe it in the manifest. This does not affect the provisioned APS Template.",
@@ -1617,13 +1898,251 @@
           ],
           "description": "Value to indicate the target ERP/SIS this manifest is intended for."
         },
+        "primaryKey": {
+          "description": "OUTPUT: The unique key for the created resource inside its target system. Primary key attribute(s): resourceType.ref",
+          "type": "null",
+          "x-referenceable": true
+        },
         "ref": {
-          "$ref": "#/definitions/baseRef"
+          "$ref": "#/$defs/baseRef"
         }
       },
       "required": [
         "resourceType",
         "ref"
+      ],
+      "additionalProperties": false
+    },
+    "experienceExtension": {
+      "type": "object",
+      "properties": {
+        "resourceType": {
+          "const": "experienceExtension",
+          "description": "Identifies what kind of resource this object represents."
+        },
+        "primaryKey": {
+          "description": "OUTPUT: The unique key for the created resource inside its target system.",
+          "type": "null",
+          "x-referenceable": true
+        },
+        "extensionKey": {
+          "description": "OUTPUT: The shared key, used across the extension's content, configuration, and assets.",
+          "type": "null",
+          "x-referenceable": true
+        },
+        "apiToken": {
+          "description": "OUTPUT: The JWT token used by the extension's backend, requiring supply of a sharedSecret, and only included in the response if returnApiToken is true.",
+          "type": "null",
+          "x-referenceable": true,
+          "$comment": "Dependent request keys not expected during deployment by EDE, but accepted for extension API structure parity."
+        },
+        "compatibleDeployStrategies": {
+          "const": [
+            "saas",
+            "onprem",
+            "managedcloud"
+          ],
+          "description": "Defines the deploy strategies that are compatible with this resourceType"
+        },
+        "compatibleERPs": {
+          "const": [
+            "banner",
+            "colleague"
+          ],
+          "description": "Value to indicate the target ERP/SIS this manifest is intended for."
+        },
+        "ref": {
+          "$ref": "#/$defs/baseRef"
+        },
+        "dependsOn": {
+          "$ref": "#/$defs/dependsOn"
+        },
+        "specification": {
+          "type": "object",
+          "description": "Experience Extension metadata used during deployment.",
+          "properties": {
+            "publisher": {
+              "description": "Publisher of the extension, matching the publisher value of the extension manifest being deployed.",
+              "type": "string"
+            },
+            "name": {
+              "description": "Display name, matching the name value of the extension manifest being deployed.",
+              "type": "string"
+            },
+            "version": {
+              "description": "Semver string, each extension allows multiple versioned records to exist.",
+              "type": "string",
+              "$comment": "Matches against the extension-version key in the extension manifest being deployed.",
+              "maxLength": 15,
+              "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$",
+              "example": "1.0.0"
+            },
+            "setup": {
+              "description": "Configuration to apply to deployment target.",
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "description": "Whether the extension should be enabled. If omitted, deployment defaults this to false.",
+                  "anyOf": [
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "string",
+                      "enum": [
+                        "true",
+                        "false"
+                      ]
+                    }
+                  ]
+                },
+                "sharedSecret": {
+                  "description": "Signing secret for the extension's JWT generation.",
+                  "type": "string",
+                  "$comment": "Not expected during deployment by EDE, but accepted for extension API structure parity."
+                },
+                "returnApiToken": {
+                  "description": "If sharedSecret is specified during a deploy, this attribute determines if the extension's generated JWT is included in the response.",
+                  "type": "boolean",
+                  "$comment": "Not expected during deployment by EDE, but accepted for extension API structure parity."
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "publisher",
+            "name",
+            "version"
+          ],
+          "additionalProperties": false
+        },
+        "attachments": {
+          "description": "A reference to the tar.gz file containing the packaged contents of the extension's 'dist' folder.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/resourceAttachment"
+          },
+          "contains": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "const": "extension"
+              }
+            }
+          },
+          "minContains": 1,
+          "maxContains": 1,
+          "minItems": 1,
+          "maxItems": 1
+        }
+      },
+      "required": [
+        "resourceType",
+        "ref",
+        "specification",
+        "attachments"
+      ],
+      "additionalProperties": false
+    },
+    "experienceRole": {
+      "type": "object",
+      "description": "Creates a role in the target tenant's Experience roles",
+      "properties": {
+        "resourceType": {
+          "const": "experienceRole",
+          "description": "Identifies what kind of resource this object represents."
+        },
+        "primaryKey": {
+          "description": "OUTPUT: The unique key for the created resource inside its target system. Primary key attribute(s): id",
+          "type": "null",
+          "x-referenceable": true
+        },
+        "compatibleDeployStrategies": {
+          "const": [
+            "saas",
+            "onprem",
+            "managedcloud"
+          ],
+          "description": "Defines the deploy strategies that are compatible with this resourceType"
+        },
+        "compatibleERPs": {
+          "const": [
+            "banner",
+            "colleague"
+          ],
+          "description": "Value to indicate the target ERP/SIS this manifest is intended for."
+        },
+        "ref": {
+          "$ref": "#/$defs/baseRef"
+        },
+        "dependsOn": {
+          "$ref": "#/$defs/dependsOn"
+        },
+        "specification": {
+          "type": "object",
+          "description": "Experience Role definition used during deployment.",
+          "properties": {
+            "name": {
+              "description": "Name of the role. Must be unique within the tenant (case-insensitive). Existing roles with the same name and source are left unchanged. For source 'experience', this is the personId. For source 'ethos-app', this is the Ethos Application ID (e.g. ${ethosApplication.<ref>.id}).",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 60
+            },
+            "source": {
+              "description": "The system the role originates from.",
+              "type": "string",
+              "enum": [
+                "erp",
+                "idp",
+                "ethos",
+                "ethos-app",
+                "experience"
+              ]
+            },
+            "description": {
+              "description": "(Optional) Description of the role.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 600
+            }
+          },
+          "required": [
+            "name",
+            "source"
+          ],
+          "if": {
+            "properties": {
+              "source": {
+                "const": "ethos"
+              }
+            },
+            "required": [
+              "source"
+            ]
+          },
+          "then": {
+            "properties": {
+              "name": {
+                "enum": [
+                  "alumni",
+                  "advisor",
+                  "employee",
+                  "instructor",
+                  "prospectiveStudent",
+                  "student",
+                  "vendor"
+                ]
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "resourceType",
+        "ref",
+        "specification"
       ],
       "additionalProperties": false
     },
@@ -1649,8 +2168,16 @@
           ],
           "description": "Value to indicate the target ERP/SIS this manifest is intended for."
         },
+        "primaryKey": {
+          "description": "OUTPUT: The unique key for the created resource inside its target system. Primary key attribute(s): resourceType.ref",
+          "type": "null",
+          "x-referenceable": true
+        },
         "ref": {
-          "$ref": "#/definitions/baseRef"
+          "$ref": "#/$defs/baseRef"
+        },
+        "dependsOn": {
+          "$ref": "#/$defs/dependsOn"
         },
         "url": {
           "type": "string",
@@ -1658,7 +2185,10 @@
           "pattern": "^https://"
         },
         "payload": {
-          "type": ["object", "null"],
+          "type": [
+            "object",
+            "null"
+          ],
           "description": "Optional body content for the request."
         },
         "failOnError": {
@@ -1703,7 +2233,10 @@
           "description": "Value to indicate the target ERP/SIS this manifest is intended for."
         },
         "ref": {
-          "$ref": "#/definitions/baseRef"
+          "$ref": "#/$defs/baseRef"
+        },
+        "dependsOn": {
+          "$ref": "#/$defs/dependsOn"
         },
         "description": {
           "description": "The description of the Colleague Event... for documentation purposes.",
@@ -1730,6 +2263,1031 @@
         "colleagueEventState"
       ],
       "additionalProperties": false
+    },
+    "insightsCollection": {
+      "type": "object",
+      "description": "An Insights Collection resource for importing Ellucian Insights collections.",
+      "properties": {
+        "resourceType": {
+          "const": "insightsCollection",
+          "description": "Identifies what kind of resource this object represents."
+        },
+        "ref": {
+          "$ref": "#/$defs/baseRef"
+        },
+        "dependsOn": {
+          "$ref": "#/$defs/dependsOn"
+        },
+        "primaryKey": {
+          "description": "OUTPUT: The unique key for the created resource inside its target system.",
+          "type": "null",
+          "x-referenceable": true
+        },
+        "compatibleDeployStrategies": {
+          "const": [
+            "saas",
+            "onprem",
+            "managedcloud"
+          ],
+          "description": "Defines the deploy strategies that are compatible with this resourceType"
+        },
+        "compatibleERPs": {
+          "const": [
+            "banner",
+            "colleague"
+          ],
+          "description": "Value to indicate the target ERP/SIS this manifest is intended for."
+        },
+        "specification": {
+          "description": "The specification object containing the details for the Insights Collection import operation.",
+          "type": "object",
+          "properties": {
+            "source": {
+              "type": "object",
+              "description": "Source configuration for the import operation.",
+              "properties": {
+                "tenantId": {
+                  "type": "string",
+                  "description": "The tenantId of the source environment."
+                },
+                "region": {
+                  "type": "string",
+                  "description": "The AWS region of the source environment."
+                },
+                "contentBundleId": {
+                  "type": "string",
+                  "description": "The content bundle ID to import from. If omitted, uses the latest export."
+                }
+              },
+              "required": [
+                "tenantId"
+              ],
+              "additionalProperties": false
+            },
+            "collections": {
+              "type": "array",
+              "description": "An array of collection objects to import.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "Collection ID to import."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Collection name - helps match the correct subfolder in multi-collection bundles."
+                  }
+                },
+                "required": [
+                  "id"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "options": {
+              "type": "object",
+              "description": "Additional options for the import operation.",
+              "properties": {
+                "rootFolderName": {
+                  "type": "string",
+                  "description": "Name of an EXISTING root collection in the target Insights Reporting Tool to import into. It is not created if missing; the import fails with DESTINATION_NOT_FOUND if no root collection matches exactly. The import chooses the target root collection in this order: 1. options.rootFolderName, if provided, must match exactly one root collection. 2. tenantName from TMS, matched against non-system root collections. 3. tenantAlias from TMS, matched against non-system root collections. 4. Ellucian Insights root collection, if present. 5. Ellucian root collection, if present."
+                },
+                "overwriteExisting": {
+                  "type": "boolean",
+                  "description": "Replace existing same-name collection. Default: true."
+                },
+                "checkVersionMatch": {
+                  "type": "boolean",
+                  "description": "Require source and target Insights Reporting Tool versions to match. Default: true."
+                },
+                "dryRun": {
+                  "type": "boolean",
+                  "description": "Validate without importing. Default: false."
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "source",
+            "collections"
+          ]
+        }
+      },
+      "required": [
+        "ref",
+        "resourceType",
+        "specification"
+      ],
+      "additionalProperties": false
+    },
+    "personManagerCredential": {
+      "type": "object",
+      "properties": {
+        "resourceType": {
+          "const": "personManagerCredential",
+          "description": "[READ-ONLY] This resource type retrieves the Ethos Person Manager credential from the Ethos Service for the target deploy environment... only to be referenced elsewhere in the manifest."
+        },
+        "ref": {
+          "$ref": "#/$defs/baseRef"
+        },
+        "dependsOn": {
+          "$ref": "#/$defs/dependsOn"
+        },
+        "primaryKey": {
+          "description": "OUTPUT: The unique key for the created resource inside its target system. Primary key attribute(s): username",
+          "type": "null",
+          "x-referenceable": true
+        },
+        "description": {
+          "description": "Not sure this is really needed... but you can add a description for this credential if you want, for documentation purposes only.",
+          "type": "string"
+        },
+        "username": {
+          "type": "null",
+          "description": "OUTPUT: The username (string) for the person manager account... used for authentication to access Ethos Person Manager APIs.",
+          "x-referenceable": true
+        },
+        "password": {
+          "description": "OUTPUT: The password (string) for the person manager account... used for authentication to access Ethos Person Manager APIs.",
+          "type": "null",
+          "sensitive": true,
+          "x-referenceable": true
+        },
+        "compatibleDeployStrategies": {
+          "const": [
+            "saas",
+            "onprem",
+            "managedcloud"
+          ],
+          "description": "Defines the deploy strategies that are compatible with this resourceType"
+        }
+      },
+      "compatibleERPs": {
+        "const": [
+          "banner",
+          "colleague"
+        ],
+        "description": "Value to indicate the target ERP/SIS this manifest is intended for."
+      },
+      "required": [
+        "resourceType",
+        "ref"
+      ],
+      "additionalProperties": false
+    },
+    "bannerCustomBEPEvent": {
+      "type": "object",
+      "description": "Represents a Banner Event Publisher configuration used to import or export Banner CDC events.",
+      "properties": {
+        "resourceType": {
+          "const": "bannerCustomBEPEvent",
+          "description": "Identifies what kind of resource this object represents."
+        },
+        "ref": {
+          "$ref": "#/$defs/baseRef"
+        },
+        "dependsOn": {
+          "$ref": "#/$defs/dependsOn"
+        },
+        "primaryKey": {
+          "description": "OUTPUT: Logical identifier for this Banner Event Publisher configuration.",
+          "type": "null",
+          "x-referenceable": true
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of how this Banner Event Publisher integration is used."
+        },
+        "compatibleDeployStrategies": {
+          "const": [
+            "saas"
+          ],
+          "description": "Defines the deploy strategies that are compatible with this resourceType."
+        },
+        "compatibleERPs": {
+          "const": [
+            "banner"
+          ],
+          "description": "Value to indicate the target ERP/SIS this manifest is intended for."
+        },
+        "specification": {
+          "description": "Path (relative to manifest) to the json file containing the specification for the Event.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "resourceType",
+        "ref"
+      ],
+      "additionalProperties": false
+    },
+    "ellucianForm": {
+      "type": "object",
+      "description": "A Forms resource that can be created in the target customer tenant. Can reference zero or many data sources.",
+      "properties": {
+        "resourceType": {
+          "const": "ellucianForm",
+          "description": "Identifies what kind of resource this object represents."
+        },
+        "primaryKey": {
+          "description": "OUTPUT: The unique key for the created resource inside its target system. Primary key attribute(s): id",
+          "type": "null",
+          "x-referenceable": true
+        },
+        "ref": {
+          "$ref": "#/$defs/baseRef"
+        },
+        "compatibleDeployStrategies": {
+          "const": [
+            "saas",
+            "onprem",
+            "managedcloud"
+          ],
+          "description": "Defines the deploy strategies that are compatible with this resourceType"
+        },
+        "compatibleERPs": {
+          "const": [
+            "banner",
+            "colleague"
+          ],
+          "description": "Value to indicate the target ERP/SIS this manifest is intended for."
+        },
+        "specification": {
+          "description": "Specification of the Form to be deployed",
+          "type": "object",
+          "properties": {
+            "deployAction": {
+              "$comment": "Currently only publish is supported.",
+              "type": "string",
+              "description": "The action we should take when deploying this for a customer.",
+              "enum": [
+                "publish"
+              ]
+            }
+          },
+          "required": [
+            "deployAction"
+          ],
+          "additionalProperties": false
+        },
+        "attachments": {
+          "description": "Array/list of resourceAttachment objects for Ellucian Forms. Exactly one attachment must be named 'formDefinition.json'.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/resourceAttachment"
+          },
+          "contains": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "const": "formDefinition.json"
+              }
+            }
+          },
+          "minContains": 1,
+          "maxContains": 1,
+          "minItems": 1,
+          "maxItems": 1
+        },
+        "dependsOn": {
+          "$ref": "#/$defs/dependsOn"
+        }
+      },
+      "required": [
+        "resourceType",
+        "ref",
+        "specification",
+        "attachments"
+      ],
+      "additionalProperties": false
+    },
+    "ellucianFormDataSource": {
+      "type": "object",
+      "description": "An Ellucian Forms data source reference that can be created in the target customer tenant. Most properties can be derived from form export json file's sourceTenantDataSources[].",
+      "properties": {
+        "resourceType": {
+          "const": "ellucianFormDataSource",
+          "description": "Identifies what kind of resource this object represents."
+        },
+        "primaryKey": {
+          "description": "OUTPUT: The unique key for the created resource inside its target system. Primary key attribute(s): id",
+          "type": "null",
+          "x-referenceable": true
+        },
+        "ref": {
+          "$ref": "#/$defs/baseRef"
+        },
+        "compatibleDeployStrategies": {
+          "const": [
+            "saas",
+            "onprem",
+            "managedcloud"
+          ],
+          "description": "Defines the deploy strategies that are compatible with this resourceType"
+        },
+        "compatibleERPs": {
+          "const": [
+            "banner",
+            "colleague"
+          ],
+          "description": "Value to indicate the target ERP/SIS this manifest is intended for."
+        },
+        "specification": {
+          "description": "Specification of the form data source object",
+          "type": "object",
+          "properties": {
+            "apiName": {
+              "type": "string",
+              "description": "The API name of the data source in the API Selector & Registry Service."
+            },
+            "apiSource": {
+              "type": "string",
+              "description": "The apiSource as given by the API registry. e.g. 'banner', 'colleague', 'data-connect', 'delivered'",
+              "enum": [
+                "banner",
+                "colleague",
+                "crmadvance",
+                "crmrecruit",
+                "data-connect",
+                "powercampus",
+                "delivered"
+              ]
+            },
+            "apiMethod": {
+              "type": "string",
+              "description": "the HTTP method used when invoking this API. e.g. 'get', 'post'",
+              "enum": [
+                "get",
+                "post"
+              ]
+            },
+            "apiVersion": {
+              "type": "string",
+              "description": "The version of this API as given by the API registry.",
+              "pattern": "^(?:N/A|(?:0|[1-9]\\d*)(?:\\.(?:0|[1-9]\\d*)){1,2})$"
+            },
+            "apiType": {
+              "type": "string",
+              "description": "The type of the API. e.g. 'ethos'",
+              "enum": [
+                "api",
+                "bus-poc",
+                "doc-mgmt",
+                "erp",
+                "ethos",
+                "other",
+                "specification",
+                "web-ethos",
+                "web-nonethos",
+                "web",
+                "N/A"
+              ]
+            },
+            "apiKey": {
+              "type": "string",
+              "description": "The API key to use for this data source. This is usually sourced from an ethosApplication.apiKey. If the data source does not require an apiKey, this property can be omitted."
+            },
+            "resourceName": {
+              "type": "string",
+              "description": "The name of this resource as given by the API registry"
+            },
+            "acceptHeader": {
+              "type": "string",
+              "description": "The accept header to use when calling the API. e.g. 'application/json', 'application/xml', 'text/plain', etc."
+            },
+            "securitySchemes": {
+              "type": "array",
+              "description": "The security scheme(s) to use for this data source",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "EthosIntegrationBearer",
+                  "EllucianOAuthUserToken"
+                ]
+              }
+            }
+          },
+          "required": [
+            "apiName",
+            "resourceName",
+            "apiMethod",
+            "apiVersion",
+            "apiSource",
+            "acceptHeader",
+            "apiType",
+            "securitySchemes"
+          ],
+          "additionalProperties": false
+        },
+        "dependsOn": {
+          "$ref": "#/$defs/dependsOn"
+        }
+      },
+      "required": [
+        "resourceType",
+        "ref",
+        "specification"
+      ],
+      "additionalProperties": false
+    },
+    "bpaAction": {
+      "type": "object",
+      "description": "A Process Automation Action resource that can be created in the target customer Tenant. If the Action resource refered to by this object needs an apiKey, the apiKey must be sourced from an application created in this manifest. If the action wraps a Data Connect Serverless API, it can optionally be created in this manifest as well.",
+      "properties": {
+        "resourceType": {
+          "const": "bpaAction",
+          "description": "Identifies what kind of resource this object represents."
+        },
+        "primaryKey": {
+          "description": "OUTPUT: The unique key for the created resource inside its target system. Primary key attribute(s): id",
+          "type": "null",
+          "x-referenceable": true
+        },
+        "compatibleDeployStrategies": {
+          "const": [
+            "saas",
+            "onprem",
+            "managedcloud"
+          ],
+          "description": "Defines the deploy strategies that are compatible with this resourceType"
+        },
+        "compatibleERPs": {
+          "const": [
+            "banner",
+            "colleague"
+          ],
+          "description": "Value to indicate the target ERP/SIS this manifest is intended for."
+        },
+        "ref": {
+          "$ref": "#/$defs/baseRef"
+        },
+        "dependsOn": {
+          "$ref": "#/$defs/dependsOn"
+        },
+        "attachments": {
+          "$ref": "#/$defs/resourceAttachments"
+        },
+        "specification": {
+          "description": "Specification of the BPA Action.",
+          "type": "object",
+          "properties": {
+            "id": {
+              "description": "OUTPUT: The id (uuid: string) of the action that has been deployed.",
+              "type": "null",
+              "x-referenceable": true
+            },
+            "name": {
+              "type": "string",
+              "description": "The name of the action. NOTE: When creating an action the name in the action specification file will be used, not this value.",
+              "maxLength": 50,
+              "pattern": "^(?!\\s*$).+"
+            },
+            "code": {
+              "type": "string",
+              "description": "The unique code of the action.",
+              "maxLength": 50,
+              "pattern": "^(?:(?:ELLUCIAN|ellucian)-)?[a-zA-Z0-9_]+$"
+            },
+            "deployAction": {
+              "$comment": "Currently only publishing of actions is supported",
+              "type": "string",
+              "description": "The action we should take when 'deploying' this resource for a customer.",
+              "enum": [
+                "publish"
+              ]
+            },
+            "version": {
+              "type": "string",
+              "description": "The version of the action that should be published.",
+              "maxLength": 15,
+              "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$",
+              "x-referenceable": true
+            },
+            "apiKey": {
+              "description": "The API key that should be configured for the action. Should be sourced from an application created in this manifest.",
+              "sensitive": true,
+              "type": "string"
+            },
+            "pipelineName": {
+              "description": "The name of the serverless API that should be used by the action. If not specified, the value from the specification file will be used.",
+              "type": "string",
+              "maxLength": 255,
+              "pattern": "^(?!\\s*$).+"
+            },
+            "pipelineVersion": {
+              "description": "The version of the serverless API that should be used by the action. If not specified, the value from the specification file will be used.",
+              "type": "string",
+              "maxLength": 40,
+              "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
+            }
+          },
+          "required": [
+            "name",
+            "deployAction",
+            "version",
+            "code"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "ref",
+        "resourceType",
+        "specification",
+        "attachments"
+      ],
+      "additionalProperties": false
+    },
+    "bpaProcessDefinition": {
+      "type": "object",
+      "description": "A Process Automation process definition resource that can be created in the target customer tenant.",
+      "properties": {
+        "resourceType": {
+          "const": "bpaProcessDefinition",
+          "description": "Identifies what kind of resource this object represents."
+        },
+        "primaryKey": {
+          "description": "OUTPUT: The unique key for the created resource inside its target system. Primary key attribute(s): id",
+          "type": "null",
+          "x-referenceable": true
+        },
+        "compatibleDeployStrategies": {
+          "const": [
+            "saas",
+            "onprem",
+            "managedcloud"
+          ],
+          "description": "Defines the deploy strategies that are compatible with this resourceType"
+        },
+        "compatibleERPs": {
+          "const": [
+            "banner",
+            "colleague"
+          ],
+          "description": "Value to indicate the target ERP/SIS this manifest is intended for."
+        },
+        "ref": {
+          "$ref": "#/$defs/baseRef"
+        },
+        "dependsOn": {
+          "$ref": "#/$defs/dependsOn"
+        },
+        "attachments": {
+          "$ref": "#/$defs/resourceAttachments"
+        },
+        "specification": {
+          "description": "Specification of the process definition.",
+          "type": "object",
+          "properties": {
+            "id": {
+              "description": "OUTPUT: The id (uuid: string) of the process definition that has been deployed.",
+              "type": "null",
+              "x-referenceable": true
+            },
+            "name": {
+              "type": "string",
+              "description": "The name of the process. NOTE: When updating a process the name in the process definition file will be ignored and must be specified here.",
+              "maxLength": 50,
+              "pattern": "^(?!\\s*$).+"
+            },
+            "code": {
+              "type": "string",
+              "description": "The unique code of the process definition.",
+              "maxLength": 60,
+              "pattern": "^(?:(?:ELLUCIAN|ellucian)-)?[a-zA-Z0-9_]+$"
+            },
+            "deployAction": {
+              "$comment": "Currently only publishing of process definitions is supported",
+              "type": "string",
+              "description": "The action we should take when 'deploying' this resource for a customer.",
+              "enum": [
+                "publish"
+              ]
+            },
+            "version": {
+              "type": "string",
+              "description": "The version of the process definition that should published.",
+              "maxLength": 15,
+              "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$",
+              "example": "1.0.0",
+              "x-referenceable": true
+            },
+            "description": {
+              "type": "string",
+              "description": "The description of the process. NOTE: When updating a process the description in the process definition file will be ignored and must be specified here",
+              "maxLength": 50,
+              "pattern": "^(?!\\s*$).+"
+            },
+            "licenseCodes": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 100,
+                "pattern": "^[a-zA-Z0-9]+$"
+              },
+              "uniqueItems": true,
+              "description": "Array of license codes required to use this process (alphanumeric characters only). For Ellucian delivered processes only."
+            },
+            "product": {
+              "type": "string",
+              "description": "Product the process definition is associated with. For Ellucian delivered processes only.",
+              "maxLength": 100,
+              "pattern": "^(?!\\s*$).+"
+            },
+            "locale": {
+              "type": "string",
+              "maxLength": 50,
+              "example": "en-US"
+            },
+            "timezone": {
+              "type": "string",
+              "maxLength": 64,
+              "example": "America/New_York"
+            }
+          },
+          "required": [
+            "name",
+            "deployAction",
+            "version",
+            "code"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "ref",
+        "resourceType",
+        "specification",
+        "attachments"
+      ],
+      "additionalProperties": false
+    },
+    "bpaExternalTask": {
+      "type": "object",
+      "properties": {
+        "resourceType": {
+          "const": "bpaExternalTask",
+          "description": "Identifies what kind of resource this object represents."
+        },
+        "primaryKey": {
+          "description": "OUTPUT: The unique key for the created resource inside its target system. Primary key attribute(s): id",
+          "type": "null",
+          "x-referenceable": true
+        },
+        "compatibleDeployStrategies": {
+          "const": [
+            "saas",
+            "onprem",
+            "managedcloud"
+          ],
+          "description": "Defines the deploy strategies that are compatible with this resourceType"
+        },
+        "compatibleERPs": {
+          "const": [
+            "banner",
+            "colleague"
+          ],
+          "description": "Value to indicate the target ERP/SIS this manifest is intended for."
+        },
+        "ref": {
+          "$ref": "#/$defs/baseRef"
+        },
+        "dependsOn": {
+          "$ref": "#/$defs/dependsOn"
+        },
+        "attachments": {
+          "$ref": "#/$defs/resourceAttachments"
+        },
+        "specification": {
+          "type": "object",
+          "description": "A BPA External Task resource that can be created in the target customer Tenant.",
+          "properties": {
+            "id": {
+              "type": "null",
+              "description": "OUTPUT: The id (uuid: string) of the external task that has been deployed.",
+              "x-referenceable": true
+            },
+            "name": {
+              "type": "string",
+              "description": "The name of the external. NOTE: When creating an external task the name in the external task specification file will be used, not this value.",
+              "maxLength": 50,
+              "pattern": "^(?!\\s*$).+"
+            },
+            "code": {
+              "type": "string",
+              "description": "The unique code of the external task.",
+              "maxLength": 50,
+              "pattern": "^(?:(?:ELLUCIAN|ellucian)-)?[a-zA-Z0-9_]+$"
+            },
+            "deployAction": {
+              "type": "string",
+              "description": "The action we should take when 'deploying' this resource for a customer.",
+              "enum": [
+                "publish"
+              ]
+            },
+            "version": {
+              "type": "string",
+              "description": "The version of the resource.",
+              "maxLength": 15,
+              "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$",
+              "example": "1.0.0"
+            },
+            "accountId": {
+              "type": "string",
+              "description": "The account identifier to configure for the external task. If omitted, the value from the specification file is used. If that is also omitted, Ellucian Experience's default accountId handling applies when navigateToPage hook does not specify one.",
+              "pattern": "^(?!\\s*$).+"
+            }
+          },
+          "required": [
+            "name",
+            "deployAction",
+            "version",
+            "code"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "ref",
+        "resourceType",
+        "specification",
+        "attachments"
+      ],
+      "additionalProperties": false
+    },
+    "bpaApprovalGroup": {
+      "type": "object",
+      "description": "A Process Automation Approval Group resource that can be created in the target customer Tenant.",
+      "properties": {
+        "resourceType": {
+          "const": "bpaApprovalGroup",
+          "description": "Identifies what kind of resource this object represents."
+        },
+        "primaryKey": {
+          "description": "OUTPUT: The unique key for the created resource inside its target system. Primary key attribute(s): id",
+          "type": "null",
+          "x-referenceable": true
+        },
+        "compatibleDeployStrategies": {
+          "const": [
+            "saas",
+            "onprem",
+            "managedcloud"
+          ],
+          "description": "Defines the deploy strategies that are compatible with this resourceType"
+        },
+        "compatibleERPs": {
+          "const": [
+            "banner",
+            "colleague"
+          ],
+          "description": "Value to indicate the target ERP/SIS this manifest is intended for."
+        },
+        "ref": {
+          "$ref": "#/$defs/baseRef"
+        },
+        "dependsOn": {
+          "$ref": "#/$defs/dependsOn"
+        },
+        "specification": {
+          "description": "Specification of the BPA Approval Group.",
+          "type": "object",
+          "properties": {
+            "id": {
+              "description": "OUTPUT: The id (uuid: string) of the approval group that has been deployed.",
+              "type": "null",
+              "x-referenceable": true
+            },
+            "name": {
+              "type": "string",
+              "description": "The name of the approval group. It must be unique within the target tenant",
+              "maxLength": 50,
+              "pattern": "^(?!\\s*$).+"
+            },
+            "code": {
+              "type": "string",
+              "description": "The unique code that identifies the approval group in the target tenant.",
+              "maxLength": 50,
+              "pattern": "^(?!\\s*$).+"
+            },
+            "description": {
+              "type": "string",
+              "description": "The description of the approval group.",
+              "maxLength": 150
+            }
+          },
+          "required": [
+            "name",
+            "code"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "ref",
+        "resourceType",
+        "specification"
+      ],
+      "additionalProperties": false
+    },
+    "colleagueSecurityUser": {
+      "type": "object",
+      "$comment": "NOTES: a colleagueSecurityUser will be created or permissions will be updated if already present. An 'organizational-role' will be created + granted to the user, and the specified permissions will be assigned to that organizational role. This is required because in Colleague, permissions cannot be directly assigned to users.",
+      "properties": {
+        "resourceType": {
+          "const": "colleagueSecurityUser",
+          "description": "Identifies what kind of resource this object represents."
+        },
+        "ref": {
+          "$ref": "#/$defs/baseRef"
+        },
+        "dependsOn": {
+          "$ref": "#/$defs/dependsOn"
+        },
+        "primaryKey": {
+          "description": "OUTPUT: The unique key for the created resource inside its target system. Primary key attribute(s): personId (returned by the colleague api)",
+          "type": "null",
+          "x-referenceable": true
+        },
+        "compatibleDeployStrategies": {
+          "const": [
+            "saas"
+          ],
+          "description": "Defines the deploy strategies that are compatible with this resourceType"
+        },
+        "compatibleERPs": {
+          "const": [
+            "colleague"
+          ],
+          "description": "Value to indicate the target ERP/SIS this manifest is intended for."
+        },
+        "username": {
+          "type": "string",
+          "description": "The username (colleagueUserID) of the Colleague user to be created. Must be between 3 and 24 characters, start with a letter, and contain only letters, numbers, hyphens, underscores, and periods.",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9-_.]{2,23}$",
+          "x-referenceable": true
+        },
+        "password": {
+          "description": "OUTPUT: The password (string) assigned to the user during deployment (auto-assigned).",
+          "type": "null",
+          "sensitive": true,
+          "x-referenceable": true
+        },
+        "description": {
+          "description": "The description of the Colleague Security User.",
+          "type": "string"
+        },
+        "permissionCodes": {
+          "type": "array",
+          "description": "An array of Colleague permission codes (e.g. VIEW.STUDENT.INFORMATION) to be assigned to the user.",
+          "items": {
+            "type": "string",
+            "description": "A Colleague permission code to be assigned to the user (e.g. VIEW.STUDENT.INFORMATION).",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "minItems": 1
+        },
+        "roleId": {
+          "description": "OUTPUT: The ID of the organizational role created for this user.",
+          "type": "null",
+          "x-referenceable": true
+        },
+        "roleTitle": {
+          "description": "OUTPUT: The title of the organizational role created for this user (e.g. '{username}-ede-api-role').",
+          "type": "null",
+          "x-referenceable": true
+        }
+      },
+      "required": [
+        "resourceType",
+        "ref",
+        "username",
+        "permissionCodes"
+      ],
+      "additionalProperties": false
+    },
+    "experiencePermission": {
+      "type": "object",
+      "description": "Grants permission for a specific Resource's Action to a target role",
+      "properties": {
+        "resourceType": {
+          "const": "experiencePermission",
+          "description": "Identifies what kind of resource this object represents."
+        },
+        "primaryKey": {
+          "description": "OUTPUT: The unique key for the created resource inside its target system. Primary key attribute(s): id",
+          "type": "null",
+          "x-referenceable": true
+        },
+        "compatibleDeployStrategies": {
+          "const": [
+            "saas",
+            "onprem",
+            "managedcloud"
+          ],
+          "description": "Defines the deploy strategies that are compatible with this resourceType"
+        },
+        "compatibleERPs": {
+          "const": [
+            "banner",
+            "colleague"
+          ],
+          "description": "Value to indicate the target ERP/SIS this manifest is intended for."
+        },
+        "ref": {
+          "$ref": "#/$defs/baseRef"
+        },
+        "dependsOn": {
+          "$ref": "#/$defs/dependsOn"
+        },
+        "description": {
+          "type": "string",
+          "description": "A human-readable description of the this resource (OPTIONAL)."
+        },
+        "specification": {
+          "description": "Specification of the Experience Permission.",
+          "type": "object",
+          "properties": {
+            "role": {
+              "type": "string",
+              "description": "The target role to which the permission is being granted.",
+              "maxLength": 64
+            },
+            "interface": {
+              "type": "string",
+              "description": "The 'interface' the permission being granted comes from, usually aligned with the name of an Experience Extension.",
+              "maxLength": 64
+            },
+            "resourcePath": {
+              "type": "string",
+              "description": "The path to the resource for which the permission is being granted. Unique within the context of the interface.",
+              "maxLength": 128
+            },
+            "action": {
+              "type": "string",
+              "description": "The name of the action that the target is being granted permission for.",
+              "maxLength": 50
+            }
+          },
+          "required": [
+            "role",
+            "interface",
+            "resourcePath",
+            "action"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "resourceType",
+        "ref",
+        "specification"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "x-ellucian-metadata": {
+    "availableLocalVariables": {
+      "description": "A list of variables provided in the manifest's runtime context by EDE. These can be used in the manifest to reference values that are only known at runtime, such as the tenant ID of the target environment.",
+      "syntax": "${local.<name>}",
+      "variables": [
+        {
+          "name": "tenant_id",
+          "expression": "${local.tenant_id}",
+          "type": "string",
+          "description": "Ethos tenant ID of the deployment target.",
+          "example": "51afd39b-91d9-4963-9481-3aed56013a2b",
+          "sensitive": false
+        },
+        {
+          "name": "tenant_alias",
+          "expression": "${local.tenant_alias}",
+          "type": "string",
+          "description": "Ethos tenant alias of the deployment target.",
+          "example": "bossaastest",
+          "sensitive": false
+        },
+        {
+          "name": "tenant_label",
+          "expression": "${local.tenant_label}",
+          "type": "string",
+          "description": "Ethos tenant label of the deployment target.",
+          "example": "SaaSProduction",
+          "sensitive": false
+        },
+        {
+          "name": "salesforce_id",
+          "expression": "${local.salesforce_id}",
+          "type": "string",
+          "description": "Salesforce ID of the deployment target.",
+          "example": "0018Y00002l3eDBQAY",
+          "sensitive": false
+        }
+      ]
     }
   }
 }
